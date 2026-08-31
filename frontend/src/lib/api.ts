@@ -1,4 +1,8 @@
-const API_BASE = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000';
+export const API_BASE = typeof window !== 'undefined'
+  ? (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? (process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000')
+      : (process.env.NEXT_PUBLIC_BACKEND_URL || ''))
+  : (process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000');
 
 export async function fetchStats() {
   const res = await fetch(`${API_BASE}/api/stats`, { cache: 'no-store' });

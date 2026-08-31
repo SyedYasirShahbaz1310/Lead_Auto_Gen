@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Sidebar } from "@/components/Sidebar";
+import { ThemeProvider } from "@/lib/theme";
 
 export const metadata: Metadata = {
   title: "LenGen AI - Autonomous Lead Gen & Cold Outreach Engine",
@@ -14,11 +15,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className="bg-[#080c14] text-slate-100 min-h-screen flex antialiased selection:bg-primary-500/30 selection:text-primary-300">
-        <Sidebar />
-        <div className="flex-1 flex flex-col min-w-0 radial-gradient-bg min-h-screen">
-          {children}
-        </div>
+      <body className="min-h-screen flex antialiased selection:bg-primary-500/30 selection:text-primary-300">
+        <ThemeProvider>
+          <Sidebar />
+          <div className="flex-1 flex flex-col min-w-0 radial-gradient-bg min-h-screen">
+            {children}
+          </div>
+        </ThemeProvider>
       </body>
     </html>
   );

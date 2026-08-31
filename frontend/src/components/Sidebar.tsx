@@ -7,12 +7,13 @@ import {
   LayoutDashboard, 
   Users, 
   KeyRound, 
-  Send, 
   Zap, 
-  ShieldCheck, 
   Sparkles,
-  Database
+  Database,
+  Sun,
+  Moon
 } from 'lucide-react';
+import { useTheme } from '@/lib/theme';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: LayoutDashboard },
@@ -22,9 +23,10 @@ const navigation = [
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { theme, toggleTheme } = useTheme();
 
   return (
-    <aside className="w-64 bg-surface-200/90 border-r border-white/5 flex flex-col justify-between p-4 h-screen sticky top-0 backdrop-blur-xl z-20">
+    <aside className="w-64 bg-surface-200/90 border-r border-white/5 flex flex-col justify-between p-4 h-screen sticky top-0 backdrop-blur-xl z-20 transition-all">
       <div>
         {/* Brand Logo */}
         <div className="flex items-center gap-3 px-3 py-4 mb-6 border-b border-white/5">
@@ -32,7 +34,7 @@ export function Sidebar() {
             <Zap className="h-5 w-5 text-white" />
           </div>
           <div>
-            <h1 className="font-bold text-lg text-white tracking-wide flex items-center gap-1.5">
+            <h1 className="font-bold text-lg text-slate-100 tracking-wide flex items-center gap-1.5">
               LenGen <span className="text-[10px] uppercase font-bold tracking-widest px-1.5 py-0.5 rounded bg-primary-500/20 text-primary-400 border border-primary-500/30">AI</span>
             </h1>
             <p className="text-xs text-slate-400">Zero-SQL Outreach Engine</p>
@@ -50,7 +52,7 @@ export function Sidebar() {
                 href={item.href}
                 className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 ${
                   isActive
-                    ? 'bg-primary-600/20 text-primary-400 border border-primary-500/30 shadow-glow-primary'
+                    ? 'bg-primary-600/20 text-primary-400 border border-primary-500/30 shadow-glow-primary font-semibold'
                     : 'text-slate-400 hover:text-slate-200 hover:bg-surface-50/50'
                 }`}
               >
@@ -88,19 +90,39 @@ export function Sidebar() {
         </div>
       </div>
 
-      {/* Database & System Footprint */}
-      <div className="p-3 rounded-xl bg-surface-100/40 border border-white/5 text-xs text-slate-400 space-y-1">
-        <div className="flex items-center justify-between">
-          <span className="flex items-center gap-1.5 text-slate-300 font-medium">
-            <Database className="h-3.5 w-3.5 text-accent-emerald" /> Primary DB
+      <div className="space-y-3">
+        {/* Quick Theme Switcher Card */}
+        <button
+          onClick={toggleTheme}
+          className="w-full flex items-center justify-between px-3 py-2 rounded-xl bg-surface-100/50 hover:bg-surface-50 border border-white/5 text-xs text-slate-300 transition-all group"
+        >
+          <span className="flex items-center gap-2">
+            {theme === 'dark' ? (
+              <Sun className="h-3.5 w-3.5 text-amber-400 group-hover:rotate-45 transition-transform" />
+            ) : (
+              <Moon className="h-3.5 w-3.5 text-indigo-500 group-hover:-rotate-12 transition-transform" />
+            )}
+            <span className="font-medium">{theme === 'dark' ? 'Light Theme' : 'Dark Theme'}</span>
           </span>
-          <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-mono">
-            Google Sheets
+          <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface-200 border border-white/10 text-slate-400 uppercase font-mono">
+            {theme}
           </span>
+        </button>
+
+        {/* Database & System Footprint */}
+        <div className="p-3 rounded-xl bg-surface-100/40 border border-white/5 text-xs text-slate-400 space-y-1">
+          <div className="flex items-center justify-between">
+            <span className="flex items-center gap-1.5 text-slate-300 font-medium">
+              <Database className="h-3.5 w-3.5 text-accent-emerald" /> Primary DB
+            </span>
+            <span className="text-[10px] bg-emerald-500/10 text-emerald-400 px-1.5 py-0.5 rounded font-mono">
+              Google Sheets
+            </span>
+          </div>
+          <p className="text-[11px] text-slate-500 truncate" title="1WfbbOks3xmzXImmHAXmER4P_cpBVAsgZlk_qpItFaaM">
+            ID: 1WfbbOks3...
+          </p>
         </div>
-        <p className="text-[11px] text-slate-500 truncate" title="1WfbbOks3xmzXImmHAXmER4P_cpBVAsgZlk_qpItFaaM">
-          ID: 1WfbbOks3...
-        </p>
       </div>
     </aside>
   );

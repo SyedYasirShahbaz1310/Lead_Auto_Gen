@@ -138,7 +138,11 @@ export default function DashboardPage() {
 
     connectWebSocket();
 
-    const interval = setInterval(loadData, 10000);
+    const interval = setInterval(() => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'visible') {
+        loadData();
+      }
+    }, 3500);
 
     return () => {
       if (socket) socket.close();

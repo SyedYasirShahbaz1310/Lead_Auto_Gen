@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Play, Pause, RotateCw, AlertTriangle, Radio, Activity } from 'lucide-react';
+import { Play, Pause, RotateCw, AlertTriangle, Radio, Sun, Moon } from 'lucide-react';
 import { EngineState } from '@/lib/types';
+import { useTheme } from '@/lib/theme';
 
 interface HeaderProps {
   engineState: EngineState;
@@ -21,6 +22,8 @@ export function Header({
   onPause,
   onResume,
 }: HeaderProps) {
+  const { theme, toggleTheme } = useTheme();
+
   const getStatusBadge = () => {
     switch (engineState) {
       case 'RUNNING':
@@ -39,7 +42,7 @@ export function Header({
         );
       default:
         return (
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800 border border-slate-700 text-slate-400 text-xs font-semibold">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-slate-800/80 border border-slate-700 text-slate-400 text-xs font-semibold">
             <span className="h-2 w-2 rounded-full bg-slate-500"></span>
             <span>ENGINE IDLE</span>
           </div>
@@ -48,7 +51,7 @@ export function Header({
   };
 
   return (
-    <header className="h-16 border-b border-white/5 bg-surface-200/50 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-10">
+    <header className="h-16 border-b border-white/5 bg-surface-200/80 backdrop-blur-md px-6 flex items-center justify-between sticky top-0 z-10">
       <div className="flex items-center gap-4">
         {getStatusBadge()}
         
@@ -60,10 +63,29 @@ export function Header({
       </div>
 
       <div className="flex items-center gap-3">
+        {/* Dark / Light Theme Toggle Button */}
+        <button
+          onClick={toggleTheme}
+          title={theme === 'dark' ? 'Switch to Light Theme' : 'Switch to Dark Theme'}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border border-white/10 hover:border-primary-500/40 bg-surface-100/80 hover:bg-primary-500/10 text-slate-300 hover:text-primary-400 text-xs font-medium transition-all shadow-sm group"
+        >
+          {theme === 'dark' ? (
+            <>
+              <Sun className="h-4 w-4 text-amber-400 transition-transform group-hover:rotate-45" />
+              <span className="hidden sm:inline">Light Mode</span>
+            </>
+          ) : (
+            <>
+              <Moon className="h-4 w-4 text-indigo-500 transition-transform group-hover:-rotate-12" />
+              <span className="hidden sm:inline">Dark Mode</span>
+            </>
+          )}
+        </button>
+
         {/* WebSocket health indicator */}
-        <div className="flex items-center gap-1.5 text-xs text-slate-400 mr-2" title="WebSocket Live Stream">
-          <Radio className={`h-3.5 w-3.5 ${wsConnected ? 'text-emerald-400 animate-pulse' : 'text-slate-600'}`} />
-          <span className="hidden sm:inline">{wsConnected ? 'Live Stream' : 'Connecting...'}</span>
+        <div className="flex items-center gap-1.5 text-xs text-slate-400 mr-2" title="Engine Communication Channel">
+          <Radio className={`h-3.5 w-3.5 ${wsConnected ? 'text-emerald-400 animate-pulse' : 'text-slate-500'}`} />
+          <span className="hidden sm:inline">{wsConnected ? 'Live Stream' : 'REST Active'}</span>
         </div>
 
         {/* Engine Controls */}
