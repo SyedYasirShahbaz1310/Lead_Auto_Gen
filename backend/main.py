@@ -62,8 +62,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="LenGen Autonomous Cold Outreach Engine",
     description="Production-grade Zero-SQL Lead Gen, Verification, AI Personalization & Cold Outreach Engine",
-    version="1.0.0",
-    lifespan=lifespan
+    version="1.0.0"
 )
 
 # Enable CORS for Next.js frontend
