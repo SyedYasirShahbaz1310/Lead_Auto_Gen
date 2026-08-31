@@ -1,6 +1,6 @@
 
 import os
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import Field
 from pathlib import Path
 
@@ -23,10 +23,11 @@ class Settings(BaseSettings):
     DISPATCH_DELAY_MAX: int = Field(default=180)
     DEMO_FAST_DISPATCH: bool = Field(default=False)
 
-    class Config:
-        env_file = str(BASE_DIR / ".env")
-        env_file_encoding = "utf-8"
-        extra = "ignore"
+    model_config = SettingsConfigDict(
+        env_file=str(BASE_DIR / ".env") if (BASE_DIR / ".env").exists() else None,
+        env_file_encoding="utf-8",
+        extra="ignore"
+    )
 
 settings = Settings()
 
