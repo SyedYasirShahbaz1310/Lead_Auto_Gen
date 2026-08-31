@@ -1,6 +1,9 @@
 import os
 import sys
+import traceback
 from pathlib import Path
+from starlette.requests import Request
+from starlette.responses import JSONResponse
 
 # Dynamically add all potential paths to sys.path
 current_file = Path(__file__).resolve()
@@ -33,7 +36,6 @@ except Exception as e1:
         @app.get("/api/health")
         @app.get("/api/{path:path}")
         async def fallback_handler(path: str = ""):
-            import traceback
             return {
                 "status": "error",
                 "message": "Backend import failed on Vercel Serverless",
@@ -43,6 +45,19 @@ except Exception as e1:
                 "cwd": os.getcwd(),
                 "sys_path": sys.path
             }
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    return JSONResponse(
+        status_code=200,
+        content={
+            "status": "exception_caught",
+            "message": str(exc),
+            "type": exc.__class__.__name__,
+            "traceback": traceback.format_exc(),
+            "path": str(request.url)
+        }
+    )
 
 # Vercel ASGI entry point
 app = app
