@@ -1,3 +1,13 @@
+---
+title: LenGen AI Backend
+emoji: ⚡
+colorFrom: indigo
+colorTo: purple
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # LenGen AI — Autonomous Zero-SQL Lead Generation, Verification & Cold Outreach Engine
 
 An enterprise-grade, production-ready lead generation and automated outreach engine built with **Next.js 14 App Router** (TypeScript, Tailwind CSS, Lucide Icons), **Python FastAPI** async processing workers, and **Google Sheets** as the primary, zero-SQL database.
