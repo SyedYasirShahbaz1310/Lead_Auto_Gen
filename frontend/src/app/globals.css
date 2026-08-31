@@ -3,27 +3,9 @@
 @tailwind utilities;
 
 :root {
-  --bg-page: #080c14;
-  --bg-card: rgba(15, 23, 42, 0.85);
-  --bg-card-subtle: rgba(30, 41, 59, 0.6);
-  --border-subtle: rgba(255, 255, 255, 0.08);
-  --border-strong: rgba(255, 255, 255, 0.16);
-  --text-heading: #f8fafc;
-  --text-body: #cbd5e1;
-  --text-muted: #94a3b8;
+  --background: #080c14;
+  --foreground: #f1f5f9;
   color-scheme: dark;
-}
-
-html.light {
-  --bg-page: #f8fafc;
-  --bg-card: #ffffff;
-  --bg-card-subtle: #f1f5f9;
-  --border-subtle: #e2e8f0;
-  --border-strong: #cbd5e1;
-  --text-heading: #0f172a;
-  --text-body: #334155;
-  --text-muted: #64748b;
-  color-scheme: light;
 }
 
 * {
@@ -31,118 +13,62 @@ html.light {
 }
 
 html, body {
+  background-color: #080c14 !important;
+  color: #f1f5f9 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   min-height: 100vh;
   margin: 0;
   padding: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
-html.dark, html.dark body {
-  background-color: #080c14 !important;
-  color: #f1f5f9 !important;
+/* Custom glowing backdrop effects */
+.radial-gradient-bg {
+  background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.12) 0%, transparent 60%),
+              radial-gradient(circle at 10% 40%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.06) 0%, transparent 50%);
 }
 
-html.light, html.light body {
-  background-color: #f8fafc !important;
-  color: #0f172a !important;
-}
-
-/* Background Gradients */
-html.dark .radial-gradient-bg {
-  background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.12) 0%, transparent 50%),
-              radial-gradient(circle at 10% 40%, rgba(6, 182, 212, 0.07) 0%, transparent 40%),
-              radial-gradient(circle at 90% 80%, rgba(16, 185, 129, 0.05) 0%, transparent 40%);
-}
-
-html.light .radial-gradient-bg {
-  background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.06) 0%, transparent 50%),
-              radial-gradient(circle at 10% 30%, rgba(6, 182, 212, 0.04) 0%, transparent 40%),
-              radial-gradient(circle at 90% 70%, rgba(16, 185, 129, 0.03) 0%, transparent 40%),
-              #f8fafc;
-}
-
-/* Glass Card Styling */
-html.dark .glass-card {
-  background: rgba(15, 23, 42, 0.85);
+.glass-card {
+  background: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.07);
 }
 
-html.light .glass-card {
-  background: #ffffff;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1px solid #e2e8f0;
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.05), 0 1px 2px -1px rgba(0, 0, 0, 0.05);
+.glass-card:hover {
+  border-color: rgba(99, 102, 241, 0.3);
 }
 
-html.dark .glass-card:hover {
-  border-color: rgba(99, 102, 241, 0.35);
+.glass-card-active {
+  border-color: rgba(99, 102, 241, 0.5);
+  box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.25);
 }
 
-html.light .glass-card:hover {
-  border-color: #cbd5e1;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.06), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
-}
-
-/* Custom Scrollbars */
+/* Custom Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
 }
 
-html.dark ::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background: #0b0f19;
 }
 
-html.light ::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-
-html.dark ::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background: #1e293b;
   border-radius: 9999px;
 }
 
-html.light ::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
-}
-
 ::-webkit-scrollbar-thumb:hover {
-  background: #6366f1;
+  background: #334155;
 }
 
-/* Input Styles */
-html.light input,
-html.light select,
-html.light textarea {
-  background-color: #ffffff;
-  color: #0f172a;
-  border-color: #cbd5e1;
+/* Shimmer animation */
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 
-html.light input:focus,
-html.light select:focus,
-html.light textarea:focus {
-  border-color: #6366f1;
-  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.15);
-}
-
-html.light input::placeholder,
-html.light textarea::placeholder {
-  color: #94a3b8;
-}
-
-/* Animations */
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.animate-fade-in {
-  animation: fadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+.animate-shimmer {
+  animation: shimmer 2s infinite;
 }
