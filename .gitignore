@@ -9,13 +9,12 @@ backend/.venv/
 venv/
 ENV/
 build/
+# Python builds
 develop-eggs/
 dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
 parts/
 sdist/
 var/
