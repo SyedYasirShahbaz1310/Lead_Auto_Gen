@@ -74,20 +74,37 @@ class SheetsDB:
         self._keys_cache: List[Dict[str, Any]] = []
         self._keys_cache_ts: float = 0.0
 
-    def _get_client(self) -> gspread.Client:
+    def _get_client(self) -> Optional[gspread.Client]:
         raw_val = (settings.GOOGLE_SERVICE_ACCOUNT_JSON or "").strip()
-        if raw_val.startswith("{") and raw_val.endswith("}"):
+        
+        # Strip surrounding quotes if wrapped
+        if (raw_val.startswith('"') and raw_val.endswith('"')) or (raw_val.startswith("'") and raw_val.endswith("'")):
+            raw_val = raw_val[1:-1].strip()
+            
+        if "{" in raw_val and "}" in raw_val:
             try:
                 import json
-                info = json.loads(raw_val)
+                start_idx = raw_val.find("{")
+                end_idx = raw_val.rfind("}") + 1
+                json_str = raw_val[start_idx:end_idx]
+                info = json.loads(json_str)
+                if "private_key" in info and isinstance(info["private_key"], str):
+                    info["private_key"] = info["private_key"].replace("\\n", "\n")
                 creds = Credentials.from_service_account_info(info, scopes=SCOPES)
                 return gspread.authorize(creds)
             except Exception as e:
                 logger.warning(f"Failed parsing raw service account JSON: {e}")
         
-        creds_path = get_service_account_path()
-        creds = Credentials.from_service_account_file(creds_path, scopes=SCOPES)
-        return gspread.authorize(creds)
+        try:
+            creds_path = get_service_account_path()
+            if os.path.exists(creds_path):
+                creds = Credentials.from_service_account_file(creds_path, scopes=SCOPES)
+                return gspread.authorize(creds)
+        except Exception as e:
+            logger.warning(f"Failed loading service account file: {e}")
+            
+        logger.error("No valid Google Service Account credentials available.")
+        return None
 
     async def initialize(self):
         async with self.lock:
@@ -95,7 +112,12 @@ class SheetsDB:
                 return
             try:
                 loop = asyncio.get_event_loop()
-                self.client = await loop.run_in_executor(None, self._get_client)
+                client = await loop.run_in_executor(None, self._get_client)
+                if client is None:
+                    logger.warning("Google Sheets client is None. Running in offline/fallback mode.")
+                    self._initialized = True
+                    return
+                self.client = client
                 self.spreadsheet = await loop.run_in_executor(
                     None, lambda: self.client.open_by_key(settings.GOOGLE_SHEET_ID)
                 )
