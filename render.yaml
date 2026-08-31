@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: lead-auto-gen-backend
+    runtime: python
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn backend.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
+      - key: GOOGLE_SHEET_ID
+        sync: false
+      - key: GOOGLE_SERVICE_ACCOUNT_JSON
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: BREVO_API_KEY
+        sync: false
+      - key: BREVO_SENDER_NAME
+        value: Erha Technologies
+      - key: BREVO_SENDER_EMAIL
+        value: info@erhatechnologies.com
+      - key: HUNTER_API_KEY
+        sync: false
+      - key: TOMBA_API_KEY
+        sync: false
+      - key: APILAYER_API_KEY
+        sync: false
+      - key: DOMAINSDB_API_KEY
+        sync: false
