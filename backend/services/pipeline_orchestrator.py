@@ -29,10 +29,16 @@ class PipelineOrchestrator:
         self.active_connections: Set[WebSocket] = set()
         self.bg_task: Optional[asyncio.Task] = None
         self.logs: List[Dict[str, Any]] = []
-        self.lock = asyncio.Lock()
+        self._lock: Optional[asyncio.Lock] = None
         
         # Link key service to orchestrator for pause triggers
         key_service.set_orchestrator(self)
+
+    @property
+    def lock(self) -> asyncio.Lock:
+        if self._lock is None:
+            self._lock = asyncio.Lock()
+        return self._lock
 
     def is_paused(self) -> bool:
         return self.state == "PAUSED"

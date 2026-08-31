@@ -55,8 +55,14 @@ class SheetsDB:
     def __init__(self):
         self.client: Optional[gspread.Client] = None
         self.spreadsheet: Optional[gspread.Spreadsheet] = None
-        self.lock = asyncio.Lock()
+        self._lock: Optional[asyncio.Lock] = None
         self._initialized = False
+
+    @property
+    def lock(self) -> asyncio.Lock:
+        if self._lock is None:
+            self._lock = asyncio.Lock()
+        return self._lock
 
         # In-memory fast cache to avoid hitting Google Sheets 60 req/min quota
         self._raw_cache: List[Dict[str, Any]] = []

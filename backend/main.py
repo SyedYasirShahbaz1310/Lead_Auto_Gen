@@ -54,7 +54,10 @@ async def lifespan(app: FastAPI):
         logger.warning(f"Google Sheets init warning (will retry on demand): {e}")
     yield
     logger.info("Shutting down engine...")
-    await orchestrator.stop_pipeline()
+    try:
+        await orchestrator.stop_pipeline()
+    except Exception:
+        pass
 
 app = FastAPI(
     title="LenGen Autonomous Cold Outreach Engine",
